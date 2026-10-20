@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="lms_zy/lms_zy.vcxproj" Id="eb627b06-d5c9-46ee-94cb-b6e456e4e986" />
+</Solution>
