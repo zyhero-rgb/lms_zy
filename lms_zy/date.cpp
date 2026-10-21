@@ -13,7 +13,7 @@ DATE_T get_time() {
 
 	DATE_T date = { 0 };
 	time_t nowTime = time(NULL);
-	struct tm localTime;  // 定义栈上结构体变量，不是指针！
+	struct tm localTime; 
 	localtime_s(&localTime, &nowTime);   // 取地址传入
 
 	date.year = localTime.tm_year + 1900;

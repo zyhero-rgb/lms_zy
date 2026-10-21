@@ -5,13 +5,14 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="view">
+      <UniqueIdentifier>{9eba9de8-1d8b-4aef-bfd5-b792128f4c3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="app">
+      <UniqueIdentifier>{e01945c6-1fd5-4f7a-9f3a-d96e657888bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{5eb00bed-7bf9-4691-8d31-9a54d65a333a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -19,18 +20,48 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="control.cpp">
-      <Filter>源文件</Filter>
+      <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="date.cpp">
-      <Filter>源文件</Filter>
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="logwin.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="startwin.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="user.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="list.cpp">
+      <Filter>data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h">
-      <Filter>头文件</Filter>
+      <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="date.h">
-      <Filter>头文件</Filter>
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="loginwin.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="startwin.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="user.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="list.h">
+      <Filter>data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

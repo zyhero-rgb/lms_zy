@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CONTROL_H
+#define _CONTROL_H
 
 #include <graphics.h>
 
@@ -12,12 +13,7 @@
 #define EDIT_PWD 3
 #define LABEL	 4 
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define KEY_ESC 27
-
+extern IMAGE g_background;
 
 // 控件结构体
 typedef struct control_T
@@ -28,7 +24,7 @@ typedef struct control_T
 	int height;
 	int type;	// 控件类型 
 	int state;	// 选择状态 1：被选择 0：为选择
-	char text[100];
+	char text[40];
 	COLORREF defaultColor;
 	COLORREF focusColor;
 	COLORREF textColor;
@@ -64,3 +60,12 @@ WINDOW_T window_run(WINDOW_T* win);
 
 // 显示当前时间
 void show_time_now();
+
+// 加载背景图片
+void init_bk_image(LPCTSTR path);
+
+// 清屏
+void clearScreen();
+
+
+#endif // 

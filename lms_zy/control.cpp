@@ -7,6 +7,7 @@
 #include "date.h"
 #include <windows.h>
 
+IMAGE  g_background;
 
 // 控件显示函数
 void control_show(const CONTROL_T* control)
@@ -100,7 +101,7 @@ CONTROL_T create_ctrl(int _x, int _y, int _width, int _height, int _type,
 	return c;
 }
 
-// 找下一个可选择的控件（跳过 LABEL）
+// 找下一个可选择的控件，仅当前的文件可使用
 static int next_control(const WINDOW_T* win, int cur, int step)
 {
 	int count = win->count;
@@ -125,7 +126,7 @@ WINDOW_T window_run(WINDOW_T* win)
 		return *win;
 	}
 	win->controls[cur].state = 1;
-
+	clearScreen();
 	window_show(win);
 	show_time_now();
 
@@ -139,11 +140,13 @@ WINDOW_T window_run(WINDOW_T* win)
 	while (1)
 	{
 		// 时间变了就只重画时间区域，不整屏清屏
+		// 获取当前时间
 		char nowTime[64] = { 0 };
 		{
 			std::lock_guard<std::mutex> lock(time_mtx);
 			strcpy_s(nowTime, sizeof(nowTime), dateStr);
 		}
+		// 判断时间是否发生变化
 		if (strcmp(nowTime, lastTime) != 0)
 		{
 			show_time_now();
@@ -151,8 +154,48 @@ WINDOW_T window_run(WINDOW_T* win)
 		}
 
 		// 非阻塞读键盘，等待按键时时间也能继续刷新
-		while (peekmessage(&msg, EX_KEY))
+		// 同时接收键盘消息和字符输入消息
+		while (peekmessage(&msg, EX_KEY | EX_CHAR))
 		{
+			// 先出里字符输入
+			if (msg.message == WM_CHAR)
+			{
+				CONTROL_T* c = &win->controls[cur];
+				if (c->type == EDIT || c->type == EDIT_PWD)
+				{
+					size_t len = strlen(c->text);
+					if (len >= 39)
+					{
+						printf("text length is out of range\n");
+					}
+					// 处理退格
+					if (msg.ch == '\b')
+					{
+						if (len > 0)
+						{
+							c->text[len -1] = '\0';
+							printf("%s\n", c->text);
+						}
+					}
+					else if (msg.ch >= 32 && msg.ch < 127 && len < 39)
+					{
+						c->text[len] = (char)msg.ch;
+						c->text[len + 1] = '\0';
+						printf("%s\n", c->text);
+					}
+					// 每次追加一个字符，就重新绘制改编辑控件
+					control_show(c);
+				}
+				// 处理回车
+				if (c->type == BUTTON && msg.ch == '\r')
+				{
+					win->current = cur;
+					return *win;
+				}
+				continue;
+			}
+
+			// 跳过按键弹起
 			if (msg.message != WM_KEYDOWN)
 			{
 				continue;
@@ -162,6 +205,7 @@ WINDOW_T window_run(WINDOW_T* win)
 			{
 				return *win;
 			}
+			// 按下向上和向下键，先更新当前控件状态，再更新下一个非LABEL类控件的状态
 			else if (msg.vkcode == VK_DOWN)
 			{
 				win->controls[cur].state = 0;
@@ -221,4 +265,17 @@ void show_time_now()
 	}
 
 	outtextxy(timeX, timeY, timeText);
+}
+
+// 加载背景图片
+void init_bk_image(LPCTSTR path)
+{
+	loadimage(&g_background,path,WIN_WIDTH,WIN_HEIGHT,true);
+	putimage(0,0,&g_background);
+}
+
+// 清屏
+void clearScreen()
+{
+	putimage(0, 0, &g_background);
 }
