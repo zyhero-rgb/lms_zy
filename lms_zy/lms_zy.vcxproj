@@ -141,6 +141,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="adminwin.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="date.cpp" />
     <ClCompile Include="file.cpp" />
@@ -148,15 +149,18 @@
     <ClCompile Include="logwin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="startwin.cpp" />
+    <ClCompile Include="systemmanagewin.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adminwin.h" />
     <ClInclude Include="control.h" />
     <ClInclude Include="date.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="loginwin.h" />
     <ClInclude Include="startwin.h" />
+    <ClInclude Include="systemmanagewin.h" />
     <ClInclude Include="user.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

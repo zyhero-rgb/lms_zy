@@ -100,6 +100,7 @@ void destroyList(LNode* head)
         free(node->data);
         free(node);
     }
+    printf("free !!\n");
 }
 
 // 查找节点

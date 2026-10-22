@@ -28,6 +28,7 @@ typedef struct control_T
 	COLORREF defaultColor;
 	COLORREF focusColor;
 	COLORREF textColor;
+	int fontSize;	// 0 表示使用默认字号 26
 }CONTROL_T;
 
 // 窗口结构体，背景色和控件组成

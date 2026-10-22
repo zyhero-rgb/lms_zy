@@ -12,57 +12,81 @@ IMAGE  g_background;
 // 控件显示函数
 void control_show(const CONTROL_T* control)
 {
-	int i;
-	// 控件框 
-	if (control->type == BUTTON || control->type == EDIT || control->type == EDIT_PWD)
+	bool isButton = control->type == BUTTON;
+	bool isInput = control->type == EDIT || control->type == EDIT_PWD;
+	int fontH = control->fontSize > 0 ? control->fontSize : 26;
+
+	// 控件框：圆角、描边，按钮和输入框使用不同圆角
+	if (isButton || isInput)
 	{
-		// 被选中 
-		if (control->state == 1)
-		{
-			setfillcolor(control->focusColor);
-		}
-		else
-		{
-			setfillcolor(control->defaultColor);
-		}
-		fillrectangle(control->x, control->y, control->x + control->width, control->y + control->height);
+		COLORREF fill = control->state == 1 ? control->focusColor : control->defaultColor;
+		COLORREF border = control->state == 1? (isButton ? RGB(255, 255, 255) : RGB(64, 158, 255)): RGB(160, 175, 195);
+		// 设置填充的颜色和边框的颜色
+		setfillcolor(fill);
+		setlinecolor(border);
+		setlinestyle(PS_SOLID, 1);
+
+		int radius = isButton ? 12 : 8;
+		fillroundrect(control->x, control->y,control->x + control->width, control->y + control->height,radius, radius);
 	}
 
-	// 显示文本
-	settextstyle(26, 0, _T("Microsoft YaHei"));
-	settextcolor(control->textColor);
+	settextstyle(fontH, 0, _T("Microsoft YaHei"), 0, 0,(isButton || fontH >= 30) ? FW_BOLD : FW_NORMAL,false, false, false);
 	setbkmode(TRANSPARENT);
-	// 标签和编辑框 
-	if (control->type == LABEL || control->type == EDIT)
+
+	int textY = control->y + (control->height - fontH) / 2;
+
+	// 标签
+	if (control->type == LABEL)
 	{
-		outtextxy(control->x + 5, control->y + 13, control->text);
+		settextcolor(control->textColor);
+		int textX = control->x + 10;
+		if (fontH >= 30)
+		{
+			textX = control->x + (control->width - textwidth(control->text)) / 2;
+		}
+		outtextxy(textX, textY, control->text);
 	}
-	// 按钮文本居中显示 
+	// 普通输入框
+	else if (control->type == EDIT)
+	{
+		settextcolor(control->textColor);
+		outtextxy(control->x + 12, textY, control->text);
+	}
+	// 按钮
 	else if (control->type == BUTTON)
 	{
-		int textWidth = textwidth(control->text);
-		int center_x = control->x + (control->width - textWidth) / 2;
-		outtextxy(center_x, control->y + 13, control->text);
+		settextcolor(control->state == 1 ? RGB(255, 255, 255) : control->textColor);
+		int textX = control->x + (control->width - textwidth(control->text)) / 2;
+		outtextxy(textX, textY, control->text);
 	}
-	// 密码框 
+	// 密码框
 	else if (control->type == EDIT_PWD)
 	{
-		char pwd[100];
-		for (i = 0; i < strlen(control->text); i++)
+		settextcolor(control->textColor);
+		char pwd[100] = { 0 };
+		int len = (int)strlen(control->text);
+		if (len > 99)
+		{
+			len = 99;
+		}
+		for (int i = 0; i < len; i++)
 		{
 			pwd[i] = '*';
 		}
-		pwd[i] = '\0';
-		outtextxy(control->x + 5, control->y + 13, pwd);
+		pwd[len] = '\0';
+		outtextxy(control->x + 12, textY, pwd);
 	}
 }
 
 // 显示一个窗口
 void window_show(const WINDOW_T* win)
 {
+	const int radius = 15;
+	setlinecolor(BLACK);
+	setlinestyle(PS_SOLID, 1);
 	// 填充窗口的背景色
 	setfillcolor(win->bgColor);
-	fillrectangle(win->x, win->y, win->x + win->width, win->y + win->height);
+	fillroundrect(win->x, win->y, win->x + win->width, win->y + win->height,radius,radius);
 	// 显示窗口里的所有控件
 	for (int i = 0; i < win->count; i++)
 	{
@@ -98,6 +122,7 @@ CONTROL_T create_ctrl(int _x, int _y, int _width, int _height, int _type,
 	c.defaultColor = defColor;
 	c.focusColor = focusColor;
 	c.textColor = textColor;
+	c.fontSize = 0;
 	return c;
 }
 
@@ -108,7 +133,8 @@ static int next_control(const WINDOW_T* win, int cur, int step)
 	do
 	{
 		cur = (cur + step + count) % count;
-	} while (win->controls[cur].type == LABEL);
+	} 
+	while (win->controls[cur].type == LABEL);
 	return cur;
 }
 
@@ -126,10 +152,13 @@ WINDOW_T window_run(WINDOW_T* win)
 		return *win;
 	}
 	win->controls[cur].state = 1;
+
+	// 先使用背景图覆盖，防止窗口重叠
 	clearScreen();
 	window_show(win);
 	show_time_now();
 
+	// 记录上一次的时间
 	char lastTime[64] = { 0 };
 	{
 		std::lock_guard<std::mutex> lock(time_mtx);
@@ -157,7 +186,7 @@ WINDOW_T window_run(WINDOW_T* win)
 		// 同时接收键盘消息和字符输入消息
 		while (peekmessage(&msg, EX_KEY | EX_CHAR))
 		{
-			// 先出里字符输入
+			// 先处理字符输入
 			if (msg.message == WM_CHAR)
 			{
 				CONTROL_T* c = &win->controls[cur];
@@ -208,17 +237,22 @@ WINDOW_T window_run(WINDOW_T* win)
 			// 按下向上和向下键，先更新当前控件状态，再更新下一个非LABEL类控件的状态
 			else if (msg.vkcode == VK_DOWN)
 			{
+				// 记录上次选中的控件，重新绘制新选中的控件和上次选中的控件
+				int last = cur;
 				win->controls[cur].state = 0;
 				cur = next_control(win, cur, 1);
 				win->controls[cur].state = 1;
-				window_show(win);
+				control_show(&win->controls[last]);
+				control_show(&win->controls[cur]);
 			}
 			else if (msg.vkcode == VK_UP)
 			{
+				int last = cur;
 				win->controls[cur].state = 0;
 				cur = next_control(win, cur, -1);
 				win->controls[cur].state = 1;
-				window_show(win);
+				control_show(&win->controls[last]);
+				control_show(&win->controls[cur]);
 			}
 		}
 
