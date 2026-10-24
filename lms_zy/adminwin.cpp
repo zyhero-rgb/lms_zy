@@ -7,6 +7,7 @@
 // 管理员登录后跳转到该界面
 int adminwin()
 {
+	printf("adminwin\n");
 	// 窗口大小和坐标
 	const int winWid = 780;
 	const int winHgh = 500;
@@ -42,38 +43,85 @@ int adminwin()
 	const int row1 = win_y + 170;
 	const int row2 = win_y + 276;
 
-	CONTROL_T btn_system = create_ctrl(
-		col1, row1, btnW, btnH, BUTTON, 0,
-		"系统管理", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_system = {
+		.x = col1,
+		.y = row1,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_system.text, sizeof(btn_system.text), "系统管理");
 
-	CONTROL_T btn_order = create_ctrl(
-		col2, row1, btnW, btnH, BUTTON, 0,
-		"订单管理", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_order = {
+		.x = col2,
+		.y = row1,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_order.text, sizeof(btn_order.text), "订单管理");
 
-	CONTROL_T btn_storage = create_ctrl(
-		col3, row1, btnW, btnH, BUTTON, 0,
-		"仓储管理", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_storage = {
+		.x = col3,
+		.y = row1,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_storage.text, sizeof(btn_storage.text), "仓储管理");
 
-	CONTROL_T btn_transport = create_ctrl(
-		col1, row2, btnW, btnH, BUTTON, 0,
-		"运输管理", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_transport = {
+		.x = col1,
+		.y = row2,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_transport.text, sizeof(btn_transport.text), "运输管理");
 
-	CONTROL_T btn_statistics = create_ctrl(
-		col2, row2, btnW, btnH, BUTTON, 0,
-		"统计分析", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_statistics = {
+		.x = col2,
+		.y = row2,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_statistics.text, sizeof(btn_statistics.text), "统计分析");
 
-	CONTROL_T btn_logout = create_ctrl(
-		col3, row2, btnW, btnH, BUTTON, 0,
-		"退出登录", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_logout = {
+		.x = col3,
+		.y = row2,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_logout.text, sizeof(btn_logout.text), "退出登录");
 
-	// 先添加按钮，保证按钮索引为 0–5
-	win_add_ctrl(&admin_win, &btn_system);     // 0
-	win_add_ctrl(&admin_win, &btn_order);      // 1
-	win_add_ctrl(&admin_win, &btn_storage);    // 2
-	win_add_ctrl(&admin_win, &btn_transport);  // 3
-	win_add_ctrl(&admin_win, &btn_statistics); // 4
-	win_add_ctrl(&admin_win, &btn_logout);     // 5
-
+	
 	// 标签最后添加，不影响按钮索引
 	CONTROL_T title = {
 		.x = win_x,
@@ -118,12 +166,24 @@ int adminwin()
 	};
 	strcpy_s(status.text, sizeof(status.text), "请选择功能模块");
 
+	// 先添加按钮，保证按钮索引为 0–5
+	win_add_ctrl(&admin_win, &btn_system);     // 0
+	win_add_ctrl(&admin_win, &btn_order);      // 1
+	win_add_ctrl(&admin_win, &btn_storage);    // 2
+	win_add_ctrl(&admin_win, &btn_transport);  // 3
+	win_add_ctrl(&admin_win, &btn_statistics); // 4
+	win_add_ctrl(&admin_win, &btn_logout);     // 5
+
 	win_add_ctrl(&admin_win, &title);   // 6
 	win_add_ctrl(&admin_win, &welcome); // 7
 	win_add_ctrl(&admin_win, &status);  // 8
 
 	admin_win = window_run(&admin_win);
-	//if(admin_win.current == )
+	// 系统管理界面
+	if (admin_win.current == 0)
+	{
+		return 3;
+	}
 
 	if (admin_win.current == 5)
 	{

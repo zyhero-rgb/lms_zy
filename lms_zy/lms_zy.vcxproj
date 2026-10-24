@@ -143,11 +143,14 @@
   <ItemGroup>
     <ClCompile Include="adminwin.cpp" />
     <ClCompile Include="control.cpp" />
+    <ClCompile Include="createuserwin.cpp" />
     <ClCompile Include="date.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="list.cpp" />
     <ClCompile Include="logwin.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="passwordresetwin.cpp" />
+    <ClCompile Include="searchuserwin.cpp" />
     <ClCompile Include="startwin.cpp" />
     <ClCompile Include="systemmanagewin.cpp" />
     <ClCompile Include="user.cpp" />
@@ -155,10 +158,13 @@
   <ItemGroup>
     <ClInclude Include="adminwin.h" />
     <ClInclude Include="control.h" />
+    <ClInclude Include="createuserwin.h" />
     <ClInclude Include="date.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="loginwin.h" />
+    <ClInclude Include="passwordresetwin.h" />
+    <ClInclude Include="searchuserwin.h" />
     <ClInclude Include="startwin.h" />
     <ClInclude Include="systemmanagewin.h" />
     <ClInclude Include="user.h" />

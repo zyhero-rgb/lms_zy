@@ -7,15 +7,17 @@ int startWin()
 	// 460 x 360 的主菜单窗口
 	const int winW = 460;
 	const int winH = 360;
+
+	// 窗口坐标
 	const int win_x = (WIN_WIDTH - winW) / 2;
 	const int win_y = (WIN_HEIGHT - winH) / 2;
 
 	const int fieldW = 340;
 	const int left = win_x + (winW - fieldW) / 2;
 
-	const COLORREF panel = RGB(33, 53, 94);			// 背景颜色
+	const COLORREF panel = RGB(33, 53, 94);					// 背景颜色
 	const COLORREF btnColor_focus = RGB(64, 158, 255);		// 按钮被选择是的颜色
-	const COLORREF buttonBg = RGB(240, 246, 253);
+	const COLORREF buttonBg = RGB(240, 246, 253);			// 按钮背景颜色
 	const COLORREF buttonText = RGB(24, 34, 52);
 
 	// 主菜单按钮
@@ -75,9 +77,10 @@ int startWin()
 		.bgColor = panel
 	};
 
-	win_add_ctrl(&first_win, &btn_login);
-	win_add_ctrl(&first_win, &btn_forget);
-	win_add_ctrl(&first_win, &btn_exit);
+	// 先添加按钮
+	win_add_ctrl(&first_win, &btn_login);	// 0
+	win_add_ctrl(&first_win, &btn_forget);	// 1
+	win_add_ctrl(&first_win, &btn_exit);	// 2
 
 	// 标题
 	CONTROL_T title

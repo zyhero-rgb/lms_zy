@@ -11,6 +11,10 @@
 #include "list.h"
 #include "file.h"
 #include "adminwin.h"
+#include "systemmanagewin.h"
+#include "createuserwin.h"
+#include "passwordresetwin.h"
+#include "searchuserwin.h"
 
 LNode* user_list = NULL;
 FILE* user_file = NULL;
@@ -30,8 +34,9 @@ int main()
 
 	initgraph(WIN_WIDTH, WIN_HEIGHT);
 	init_bk_image(_T("d:/Users/人擦/Desktop/devc++/项目/images/bk.png"));
-	// 函数指针数组
-	window_handler wins[] = { startWin,loginWin,adminwin };
+	
+	// 函数指针数组		   //   0          1        2            3                 4            5                 6
+	window_handler wins[] = { startWin,loginWin,adminwin,system_manage_win ,createUer_win ,password_reset_win ,search_user_win };
 
 	int cur_win = 0;
 	while (true)

@@ -92,12 +92,18 @@ void window_show(const WINDOW_T* win)
 	{
 		control_show(&(win->controls[i]));
 	}
+
+	// 如果窗口设置了额外的绘制函数，在这里画表格等内容
+	if (win->draw_table != NULL)
+	{
+		win->draw_table(win);
+	}
 }
 
 // 向窗口里添加一个控件
 int win_add_ctrl(WINDOW_T* win, const CONTROL_T* ctrl)
 {
-	if (win->count >= 10)
+	if (win->count >= 16)
 	{
 		printf("count is out range\n");
 		return -1;
@@ -105,25 +111,6 @@ int win_add_ctrl(WINDOW_T* win, const CONTROL_T* ctrl)
 	win->controls[win->count] = *ctrl;
 	win->count++;
 	return 0;
-}
-
-// 创建一个控件
-CONTROL_T create_ctrl(int _x, int _y, int _width, int _height, int _type,
-	int _state, const char* _text, COLORREF defColor, COLORREF focusColor, COLORREF textColor)
-{
-	CONTROL_T c;
-	c.x = _x;
-	c.y = _y;
-	c.width = _width;
-	c.height = _height;
-	c.type = _type;
-	c.state = 0;	// 默认不选中
-	strcpy_s(c.text, sizeof(c.text),_text);
-	c.defaultColor = defColor;
-	c.focusColor = focusColor;
-	c.textColor = textColor;
-	c.fontSize = 0;
-	return c;
 }
 
 // 找下一个可选择的控件，仅当前的文件可使用
@@ -139,7 +126,7 @@ static int next_control(const WINDOW_T* win, int cur, int step)
 }
 
 // 处理窗口
-WINDOW_T window_run(WINDOW_T* win)
+WINDOW_T window_run(WINDOW_T* win )
 {
 	// 找到第一个不是标签的控件
 	int cur = 0;
@@ -206,7 +193,7 @@ WINDOW_T window_run(WINDOW_T* win)
 							printf("%s\n", c->text);
 						}
 					}
-					else if (msg.ch >= 32 && msg.ch < 127 && len < 39)
+					else if (msg.ch > 32 && msg.ch < 127 && len < 39)
 					{
 						c->text[len] = (char)msg.ch;
 						c->text[len + 1] = '\0';

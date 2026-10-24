@@ -5,6 +5,8 @@
 #include "list.h"
 #include "user.h"
 
+const char* file_name_str = "usertext.txt";
+
 /*
     函数名：file_open
     函数功能：打开文件，若文件不存在，则创建文件并打开，否则正常打开

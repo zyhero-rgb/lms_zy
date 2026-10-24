@@ -40,7 +40,7 @@ void user_data_init()
 {
 	// 初始化链表，打开文件
 	user_list = init_List();
-	user_file = file_open("usertext.txt");
+	user_file = file_open(file_name_str);
 	if (user_file == NULL)
 	{
 		perror("file or user_list is NULL\n");
@@ -79,7 +79,7 @@ void print_user(void* user)
 }
 
 // 创建角色
-void create_user(const char* name, const char* pwd)
+void create_user(const char* name, const char* pwd,const int role)
 {
 	if (name == NULL || pwd == NULL)
 	{
@@ -96,5 +96,63 @@ void create_user(const char* name, const char* pwd)
 	strcpy_s(newUser->name, sizeof(newUser->name), name);
 	strcpy_s(newUser->pwd, sizeof(newUser->pwd), pwd);
 	newUser->state = 1;
-	newUser->role = 1;
+	newUser->role = role;
+	// 将创建的新角色加入到链表，写入文件里
+	insertNode_Tail(user_list,newUser);
+	file_add(user_file,sizeof(USER_T),newUser);
+	printf("create a new user\n");
+}
+
+// 重置密码
+void resert_pwd(const char* name)
+{
+	if (name == NULL)
+	{
+		printf("name is null\n");
+		return;
+	}
+	// 查询输入的用户名是否存在
+	LNode* temp = user_list->next;
+	char* _name = NULL;
+	while (temp != NULL)
+	{
+		// 取链表节点的数据域
+		USER_T* user = (USER_T*)temp->data;
+		if (user == NULL)
+		{
+			temp = temp->next;
+			continue;
+		}
+		_name = user->name;
+		// 用户存在，且不是管理员
+		if (strcmp(_name, name) == 0 && user->role != 1)
+		{
+			// 重置密码：88888888
+			printf("%s exists\n", name);
+			strcpy_s(user->pwd, sizeof(user->pwd), "88888888");
+			// 清空文件，重新讲数据写入
+			if (user_file != NULL)
+			{
+				// 先关闭文件
+				fclose(user_file);
+			}
+			// 重新打开文件，会清空文件
+			fopen_s(&user_file, file_name_str, "wb+");
+			if (user_file != NULL)
+			{
+				// 重新写入内容
+				file_write_list(user_file, user_list, sizeof(USER_T));
+				printf("reset password successfully\n");
+				return;
+			}
+			else
+			{
+				printf("fail to open file\n");
+			}
+			
+		}
+		temp = temp->next;
+	}
+	// 未找到用户名
+	printf("%s do not exists\n",name);
 }

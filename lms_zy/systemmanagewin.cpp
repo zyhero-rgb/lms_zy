@@ -26,7 +26,8 @@ int system_manage_win()
 		.height = winHgh,
 		.count = 0,
 		.current = 0,
-		.bgColor = bkColor
+		.bgColor = bkColor,
+		.draw_table = NULL
 	};
 
 	// 按钮宽高和位置
@@ -34,21 +35,57 @@ int system_manage_win()
 	const int btnH = 56;
 	const int btnX = win_x + (winWid - btnW) / 2;
 
-	CONTROL_T btn_create_role = create_ctrl(
-		btnX, win_y + 110, btnW, btnH, BUTTON, 0,
-		"创建角色/用户", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_create_role = {
+		.x = btnX,
+		.y = win_y + 110,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_create_role.text, sizeof(btn_create_role.text), "创建角色/用户");
 
-	CONTROL_T btn_query_user = create_ctrl(
-		btnX, win_y + 180, btnW, btnH, BUTTON, 0,
-		"用户查询", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_query_user = {
+		.x = btnX,
+		.y = win_y + 180,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_query_user.text, sizeof(btn_query_user.text), "用户查询");
 
-	CONTROL_T btn_reset_pwd = create_ctrl(
-		btnX, win_y + 250, btnW, btnH, BUTTON, 0,
-		"密码重置", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_reset_pwd = {
+		.x = btnX,
+		.y = win_y + 250,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_reset_pwd.text, sizeof(btn_reset_pwd.text), "密码重置");
 
-	CONTROL_T btn_back = create_ctrl(
-		btnX, win_y + 320, btnW, btnH, BUTTON, 0,
-		"返回", btnColor_default, btnColor_focus, btnTextColor);
+	CONTROL_T btn_back = {
+		.x = btnX,
+		.y = win_y + 320,
+		.width = btnW,
+		.height = btnH,
+		.type = BUTTON,
+		.state = 0,
+		.defaultColor = btnColor_default,
+		.focusColor = btnColor_focus,
+		.textColor = btnTextColor
+	};
+	strcpy_s(btn_back.text, sizeof(btn_back.text), "返回");
 
 	// 先添加按钮，保证按钮索引为 0–3
 	win_add_ctrl(&system_win, &btn_create_role); // 0
@@ -89,6 +126,19 @@ int system_manage_win()
 	win_add_ctrl(&system_win, &status);  // 5
 
 	system_win = window_run(&system_win);
-
+	// 创建角色
+	if (system_win.current == 0)
+	{
+		return 4;
+	}
+	// 重置密码
+	if (system_win.current == 2)
+	{
+		return 5;
+	}
+	if (system_win.current == 1)
+	{
+		return 6;
+	}
 	return 0;
 }

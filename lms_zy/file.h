@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "list.h"
 
+// 文件名
+extern const char* file_name_str;
 
 // 打开文件
 FILE* file_open(const char* file_name);
