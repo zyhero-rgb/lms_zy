@@ -64,6 +64,9 @@
     <ClCompile Include="customer_service.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="order.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h">
@@ -105,10 +108,13 @@
     <ClInclude Include="warehouse_worker.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="dispathcer.h">
+    <ClInclude Include="dispatcher.h">
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="customer_service.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="order.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

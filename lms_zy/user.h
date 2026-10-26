@@ -25,8 +25,10 @@ extern USER_T* current;  // 当前登录的角色
 // 登录验证
 bool login_check(const char* name,const char* pwd);
 
+// 角色信息初始化
 void user_data_init();
 
+// 打印输出
 void print_user(void *user);
 
 // 创建角色

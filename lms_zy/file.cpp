@@ -5,7 +5,9 @@
 #include "list.h"
 #include "user.h"
 
+// 存储用户数据和订单数据的文件名
 const char* file_name_str = "usertext.txt";
+const char* order_file_name = "ordertext.txt";
 
 /*
     函数名：file_open

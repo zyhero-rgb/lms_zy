@@ -5,6 +5,7 @@
 
 // 文件名
 extern const char* file_name_str;
+extern const char* order_file_name;
 
 // 打开文件
 FILE* file_open(const char* file_name);
