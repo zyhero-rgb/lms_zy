@@ -9,9 +9,10 @@ bool login_check(const char* name, const char* pwd)
 {
 	if (user_list == NULL || name == NULL || pwd == NULL)
 	{
+		printf("name or pwd is empty\n");
 		return false;
 	}
-	// user_list的头节点为空，直接取第二个节点的数据域
+	// user_list的头节点为空，直接取第二个节点
 	LNode* temp = user_list->next;
 	char* _name = NULL;
 	char* _pwd = NULL;

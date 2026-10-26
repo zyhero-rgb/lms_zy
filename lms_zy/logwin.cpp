@@ -159,16 +159,17 @@ int loginWin()
 			// 仓储员
 			if (current->role == 2 && current->state == 1)
 			{
-				return 0;
+				return 9;
 			}
 			// 调度员
 			if (current->role == 3 && current->state == 1)
 			{
-				return 0;
+				return 8;
 			}
+			// 客服
 			if (current->role == 4 && current->state == 1)
 			{
-				return 0;
+				return 7;
 			}
 		}
 		else

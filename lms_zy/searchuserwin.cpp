@@ -5,9 +5,9 @@
 #include <string.h>
 
 // 当前查询结果和分页状态
-static USER_T* g_rows[200];   // 查询结果
-static int g_count = 0;       // 用户总数
-static int g_page = 0;        // 当前页，从 0 开始
+USER_T* g_rows[200];			// 查询结果
+static int g_count = 0;			// 用户总数
+static int g_page = 0;			// 当前页，从 0 开始
 static const int PAGE_SIZE = 5; // 每页显示的角色数据的个数
 
 // 角色文字
@@ -72,7 +72,6 @@ void draw_user_table(const WINDOW_T* win)
 	setbkmode(TRANSPARENT);
 	settextcolor(RGB(24, 34, 52));
 	settextstyle(20, 0, _T("Microsoft YaHei"));
-
 	const char* headers[4] = { "用户ID", "用户名", "角色", "状态" };
 	for (int c = 0; c < columns; c++)
 	{
@@ -82,7 +81,7 @@ void draw_user_table(const WINDOW_T* win)
 		outtextxy(x, y, headers[c]);
 	}
 
-	// 当前页的数据
+	// 当前页的数据，每页五个角色的数据
 	settextstyle(24, 0, _T("Microsoft YaHei"));
 	int start = g_page * PAGE_SIZE;
 	for (int i = 0; i < PAGE_SIZE; i++)
@@ -115,13 +114,69 @@ void draw_user_table(const WINDOW_T* win)
 		int y = table_y + (table_height - textheight(empty)) / 2;
 		outtextxy(x, y, empty);
 	}
+
+	// 页码信息
+	int all_pages = (g_count + PAGE_SIZE - 1) / PAGE_SIZE;
+	if (all_pages == 0)
+	{
+		all_pages = 1;
+	}
+
+	char page_text[64] = { 0 };
+	sprintf_s(page_text, sizeof(page_text),
+		"共 %d 页，当前第 %d 页",
+		all_pages, g_page + 1);
+
+	settextstyle(18, 0, _T("Microsoft YaHei"));
+	settextcolor(RGB(120, 200, 255));
+	setbkmode(TRANSPARENT);
+	outtextxy(win->x + 330, win->y + 548, page_text);
 }
+
+// 查询用户
+static int query_user(const char* name, const int max_count)
+{
+	if (name == NULL || user_list == NULL)
+	{
+		printf("error !!!!!\n");
+		return max_count;
+	}
+	printf("name :%s\n", name);
+	// 精确查询
+	LNode* temp1 = (LNode*)user_list->next;
+	int count = 0;
+	while (temp1 != NULL && count < max_count)
+	{
+		USER_T* user1 = (USER_T*)temp1->data;
+		if (user1 != NULL && strcmp(user1->name, name) == 0)
+		{
+			g_rows[count] = user1;
+			count++;
+		}
+		temp1 = temp1->next;
+	}
+
+	// 模糊查询，将精确查询的结果跳过
+	LNode* temp2 = (LNode*)user_list->next;
+	while (temp2 != NULL && count < max_count)
+	{
+		USER_T* user2 = (USER_T*)temp2->data;
+		if (user2 != NULL && strcmp(user2->name, name) != 0 && strstr(user2->name,name ) != NULL)
+		{
+			g_rows[count] = user2;
+			count++;
+		}
+		temp2 = temp2->next;
+	}
+	printf("count :%d\n", count);
+	return count;
+}
+
 
 // 用户查询界面
 int search_user_win()
 {
 	g_count = 0;
-	g_page = 0;
 	// 数据加载
 	LNode* temp = user_list->next;
 	while (temp != NULL)
@@ -134,7 +189,6 @@ int search_user_win()
 			break;
 		}
 	}
-
 	// 窗口大小和坐标
 	const int winWid = 820;
 	const int winHgh = 640;
@@ -237,11 +291,11 @@ int search_user_win()
 	};
 	strcpy_s(back_button.text, sizeof(back_button.text), "返回上级");
 
-	win_add_ctrl(&query_win, &search_edit);   // 0
-	win_add_ctrl(&query_win, &query_button);  // 1
-	win_add_ctrl(&query_win, &prev_button);   // 2
-	win_add_ctrl(&query_win, &next_button);   // 3
-	win_add_ctrl(&query_win, &back_button);   // 4
+	win_add_ctrl(&query_win, &search_edit);   // 0 输入
+	win_add_ctrl(&query_win, &query_button);  // 1 查询
+	win_add_ctrl(&query_win, &prev_button);   // 2 上一页
+	win_add_ctrl(&query_win, &next_button);   // 3 下一页
+	win_add_ctrl(&query_win, &back_button);   // 4 返回
 
 	// 标题
 	CONTROL_T title = {
@@ -271,7 +325,7 @@ int search_user_win()
 		default: roleName = "未知"; break;
 		}
 	}
-
+	// 显示当前登录的角色
 	CONTROL_T current_label = {
 		.x = win_x + 50,
 		.y = win_y + 90,
@@ -287,7 +341,7 @@ int search_user_win()
 	sprintf_s(current_label.text, sizeof(current_label.text),
 		"当前用户：%s（%s）",current != NULL ? current->name : "未登录",roleName);
 
-	// 登录时间（先留占位，后续可接真实登录时间）
+	// 登录时间
 	CONTROL_T login_label = {
 		.x = win_x + 440,
 		.y = win_y + 90,
@@ -317,21 +371,6 @@ int search_user_win()
 	};
 	strcpy_s(search_label.text, sizeof(search_label.text), "用户名搜索：");
 
-	// 页码提示
-	CONTROL_T page_label = {
-		.x = win_x + 330,
-		.y = win_y + 548,
-		.width = 250,
-		.height = 28,
-		.type = LABEL,
-		.state = 0,
-		.defaultColor = bkColor,
-		.focusColor = bkColor,
-		.textColor = statusColor,
-		.fontSize = 18
-	};
-	strcpy_s(page_label.text, sizeof(page_label.text), "共 0 页 当前第 1 页");
-
 	// 底部状态提示
 	CONTROL_T status = {
 		.x = win_x + 50,
@@ -347,19 +386,62 @@ int search_user_win()
 	};
 	strcpy_s(status.text, sizeof(status.text), "请输入用户名后点击查询");
 
-	// 标签最后添加，不影响输入框和按钮索引
+	// 标签
 	win_add_ctrl(&query_win, &title);         // 5
 	win_add_ctrl(&query_win, &current_label); // 6
 	win_add_ctrl(&query_win, &login_label);   // 7
 	win_add_ctrl(&query_win, &search_label);  // 8
-	win_add_ctrl(&query_win, &page_label);    // 9
-	win_add_ctrl(&query_win, &status);        // 10
+	win_add_ctrl(&query_win, &status);        // 9
 
-	query_win = window_run(&query_win);
-	// 查询按钮
-	if (query_win.current == 1)
+
+	while (true)
 	{
-		return 0;
+		// 每次进入窗口前，按当前结果重新计算总页数
+		int all_pages = (g_count + PAGE_SIZE - 1) / PAGE_SIZE;
+		if (all_pages == 0)
+		{
+			all_pages = 1;
+		}
+		if (g_page >= all_pages)
+		{
+			g_page = all_pages - 1;
+		}
+
+		query_win = window_run(&query_win);
+		// 查询按钮
+		if (query_win.current == 1)
+		{
+			// 空关键字会匹配全部用户
+			int count = query_user(query_win.controls[0].text, 200);
+			g_count = count;
+			g_page = 0;
+		}
+		// 上一页
+		else if (query_win.current == 2)
+		{
+			if (g_page >= 1)
+			{
+				g_page--;
+			}
+			else
+			{
+				g_page = 0;
+			}
+		}
+		// 下一页
+		else if (query_win.current == 3)
+		{
+			g_page++;
+			if (g_page >= all_pages)
+			{
+				g_page = 0;
+			}
+			query_win.current = 0;
+		}
+		// 退出查询
+		else if (query_win.current == 4)
+		{
+			return 3;
+		}
 	}
-	return 0;
 }

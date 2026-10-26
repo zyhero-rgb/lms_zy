@@ -9,6 +9,7 @@
 
 IMAGE  g_background;
 
+
 // 控件显示函数
 void control_show(const CONTROL_T* control)
 {
@@ -128,6 +129,11 @@ static int next_control(const WINDOW_T* win, int cur, int step)
 // 处理窗口
 WINDOW_T window_run(WINDOW_T* win )
 {
+	// 先清掉所有选中状态
+	for (int i = 0; i < win->count; i++)
+	{
+		win->controls[i].state = 0;
+	}
 	// 找到第一个不是标签的控件
 	int cur = 0;
 	while (cur < win->count && win->controls[cur].type == LABEL)
@@ -222,7 +228,7 @@ WINDOW_T window_run(WINDOW_T* win )
 				return *win;
 			}
 			// 按下向上和向下键，先更新当前控件状态，再更新下一个非LABEL类控件的状态
-			else if (msg.vkcode == VK_DOWN)
+			else if ( msg.vkcode == VK_DOWN || msg.vkcode == VK_RIGHT)
 			{
 				// 记录上次选中的控件，重新绘制新选中的控件和上次选中的控件
 				int last = cur;
@@ -232,7 +238,7 @@ WINDOW_T window_run(WINDOW_T* win )
 				control_show(&win->controls[last]);
 				control_show(&win->controls[cur]);
 			}
-			else if (msg.vkcode == VK_UP)
+			else if (msg.vkcode == VK_UP || msg.vkcode == VK_LEFT)
 			{
 				int last = cur;
 				win->controls[cur].state = 0;

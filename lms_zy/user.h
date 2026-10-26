@@ -29,8 +29,10 @@ void user_data_init();
 
 void print_user(void *user);
 
+// 创建角色
 void create_user(const char *name,const char*pwd,const int role);
 
 // 重置密码
 void resert_pwd(const char* name);
+
 #endif

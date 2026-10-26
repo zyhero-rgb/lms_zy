@@ -52,7 +52,16 @@
     <ClCompile Include="passwordresetwin.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="queryuserwin.cpp">
+    <ClCompile Include="searchuserwin.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="warehouse_worker.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="dispatcher.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="customer_service.cpp">
       <Filter>app</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,7 +99,16 @@
     <ClInclude Include="passwordresetwin.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="queryuserwin.h">
+    <ClInclude Include="searchuserwin.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="warehouse_worker.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="dispathcer.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="customer_service.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

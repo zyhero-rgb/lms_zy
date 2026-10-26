@@ -100,10 +100,12 @@ int startWin()
 	win_add_ctrl(&first_win, &title);
 
 	first_win = window_run(&first_win);
+	// 选择登录
 	if (first_win.current == 0)
 	{
 		return 1;
 	}
+	// 重置管理员密码
 	else if (first_win.current == 1)
 	{
 

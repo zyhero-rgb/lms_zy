@@ -15,6 +15,9 @@
 #include "createuserwin.h"
 #include "passwordresetwin.h"
 #include "searchuserwin.h"
+#include "customer_service.h"
+#include "dispatcher.h"
+#include "warehouse_worker.h"
 
 LNode* user_list = NULL;
 FILE* user_file = NULL;
@@ -36,7 +39,9 @@ int main()
 	init_bk_image(_T("d:/Users/人擦/Desktop/devc++/项目/images/bk.png"));
 	
 	// 函数指针数组		   //   0          1        2            3                 4            5                 6
-	window_handler wins[] = { startWin,loginWin,adminwin,system_manage_win ,createUer_win ,password_reset_win ,search_user_win };
+	window_handler wins[] = { startWin,loginWin,adminwin,system_manage_win ,createUer_win ,password_reset_win ,search_user_win ,
+								customer_service_win ,dispatcher_win ,warehouse_worker_win };
+	                           //       7                    8                 9
 
 	int cur_win = 0;
 	while (true)
