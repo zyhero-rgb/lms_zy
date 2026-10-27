@@ -185,6 +185,12 @@ int adminwin()
 		return 3;
 	}
 
+
+	if (admin_win.current == 1)
+	{
+		return 10;
+	}
+
 	if (admin_win.current == 5)
 	{
 		return 0;

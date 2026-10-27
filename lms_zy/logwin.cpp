@@ -2,6 +2,7 @@
 #include "loginwin.h"
 #include <stdio.h>
 #include "user.h"
+#include "popupwin.h"
 
 int loginWin()
 {
@@ -151,6 +152,7 @@ int loginWin()
 			printf("name:%s\n", login_win.controls[2].text);
 			printf("pwd:%s\n", login_win.controls[3].text);
 			printf("login successfully\n");
+			login_popup_win(true); // 成功弹窗
 			// 跳转到管理员界面
 			if (current->role == 1 && current->state == 1)
 			{
@@ -177,6 +179,7 @@ int loginWin()
 			printf("name:%s\n", login_win.controls[2].text);
 			printf("pwd:%s\n", login_win.controls[3].text);
 			printf("fail to login\n");
+			login_popup_win(false); // 失败弹窗
 			return 1;
 		}
 	}

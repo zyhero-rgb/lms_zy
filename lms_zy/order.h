@@ -5,12 +5,13 @@
 #include "list.h"
 
 // 订单状态
-#define ORDER_PENDING_REVIEW	1	// 待审核
-#define ORDER_REJECTED			2	// 已驳回
-#define ORDER_PENDING_OUTBOUND	3	// 待出库
-#define ORDER_IN_TRANSIT		4	// 运输中
-#define ORDER_DELIVERED			5	// 已送达
-#define ORDER_COMPLETED			6	// 已完成
+#define ORDER_PENDING_REVIEW	0	// 待审核
+#define ORDER_REJECTED			1	// 已驳回
+#define ORDER_PENDING_OUTBOUND	2	// 待出库
+#define ORDER_PENDING_TRANSPORT 3	// 待运输
+#define ORDER_IN_TRANSIT        4	// 运输中
+#define ORDER_DELIVERED         5	// 已送达
+#define ORDER_COMPLETED         6	// 已完成
 
 // 货物类型
 #define GOODS_GENERAL    1			// 普通货物
@@ -42,6 +43,7 @@ typedef struct oredr_t
 	int goods_count;				// 数量
 	float goods_volumn;				// 体积
 	
+	char rejected_reason[100];		// 驳回理由
 }ORDER_T;
 
 // 初始化几个订单数据
@@ -51,7 +53,11 @@ void order_data_init();
 void print_order(void* order);
 
 // 创建订单
-//void craete_new_order(const char* address_from,const char* address_to,const char* cus_name,
-	//const char*cus_phone,const char*g_name,const int g_type,const float g_weight,const int g_count,const float g_volumn);
+void craete_new_order(const char* address_from, const char* address_to, const char* cus_name,
+	const char* cus_phone, const char* g_name, const int g_type, 
+	const float g_weight, const int g_count, const float g_volumn);
+
+//// 订单审核
+//void audit_order(const char* );
 
 #endif

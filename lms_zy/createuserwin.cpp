@@ -3,7 +3,7 @@
 #include "createuserwin.h"
 #include "control.h"
 #include "user.h"
-
+#include "popupwin.h"
 
 // 创建角色/用户窗口
 int createUer_win()
@@ -277,12 +277,14 @@ int createUer_win()
 		{
 			// 输入密码或用户名为空，创建失败
 			printf("please input user name and user pwd to create a user\n");
+			create_popup_win(false);
 			return 4;
 		}
 
 		if (strlen(create_win.controls[0].text) > 30)
 		{
 			printf("user name length is out of range\n");
+			create_popup_win(false);
 			return 4;
 		}
 
@@ -290,6 +292,7 @@ int createUer_win()
 		if (strlen(create_win.controls[1].text) > 10 || strlen(create_win.controls[1].text) < 6)
 		{
 			printf("password length is out of range\n");
+			create_popup_win(false);
 			return 4;
 		}
 		// 用户名查重
@@ -310,6 +313,7 @@ int createUer_win()
 				if (strcmp(_name, create_win.controls[0].text) == 0)
 				{
 					printf("%s already exists\n", create_win.controls[0].text);
+					create_popup_win(false);
 					return 4;
 				}
 				temp = temp->next;
@@ -319,12 +323,14 @@ int createUer_win()
 		if (strcmp(create_win.controls[1].text, create_win.controls[2].text) != 0)
 		{
 			printf("密码不一致\n");
+			create_popup_win(false);
 			return 4;
 		}
 
 		if (strlen(create_win.controls[3].text) > 1)
 		{
 			printf("role choice is unavilable\n");
+			create_popup_win(false);
 			return 4;
 		}
 
@@ -336,6 +342,7 @@ int createUer_win()
 		}
 		const int role = create_win.controls[3].text[0] - '0' + 1;
 		create_user(create_win.controls[0].text, create_win.controls[1].text,role);
+		create_popup_win(true);
 		return 3;
 	}
 	return 0;

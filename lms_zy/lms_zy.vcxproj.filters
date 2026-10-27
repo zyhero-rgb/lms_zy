@@ -43,6 +43,9 @@
     <ClCompile Include="adminwin.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="auditorderwin.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
     <ClCompile Include="systemmanagewin.cpp">
       <Filter>app</Filter>
     </ClCompile>
@@ -65,6 +68,9 @@
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="order.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="popupwin.cpp">
       <Filter>app</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,6 +99,9 @@
     <ClInclude Include="adminwin.h">
       <Filter>app</Filter>
     </ClInclude>
+    <ClInclude Include="auditorderwin.h">
+      <Filter>app</Filter>
+    </ClInclude>
     <ClInclude Include="systemmanagewin.h">
       <Filter>app</Filter>
     </ClInclude>
@@ -115,6 +124,9 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="order.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="popupwin.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

@@ -80,12 +80,12 @@ void print_user(void* user)
 }
 
 // 创建角色
-void create_user(const char* name, const char* pwd,const int role)
+bool create_user(const char* name, const char* pwd,const int role)
 {
 	if (name == NULL || pwd == NULL)
 	{
 		perror("name or pwd is unavliable\n");
-		return;
+		return false;
 	}
 	USER_T* newUser = (USER_T*)malloc(sizeof(USER_T));
 	if (newUser == NULL)
@@ -102,6 +102,7 @@ void create_user(const char* name, const char* pwd,const int role)
 	insertNode_Tail(user_list,newUser);
 	file_add(user_file,sizeof(USER_T),newUser);
 	printf("create a new user\n");
+	return true;
 }
 
 // 重置密码

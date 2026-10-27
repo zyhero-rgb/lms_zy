@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <mutex>
 
+// 货物类型
 static const char* goods_type_names[] = {
 	"未知",
 	"普通货物",
@@ -17,11 +18,12 @@ static const char* goods_type_names[] = {
 	"大件货物"
 };
 
+// 状态
 static const char* order_status_names[] = {
-	"未知",
 	"待审核",
 	"已驳回",
-	"待出库",
+	"待出库",	
+	"待运输",
 	"运输中",
 	"已送达",
 	"已完成"
@@ -41,20 +43,23 @@ void order_data_init()
 	if (file_getSize(order_file) == 0)
 	{
 		ORDER_T* order1 = (ORDER_T*)malloc(sizeof(ORDER_T));
-		if (order1 == NULL)
+		ORDER_T* order2 = (ORDER_T*)malloc(sizeof(ORDER_T));
+		if (order1 == NULL || order2 == NULL)
 		{
 			printf("malloc failed\n");
 			exit(1);
 		}
 		memset(order1, 0, sizeof(ORDER_T));
-
+		memset(order2, 0, sizeof(ORDER_T));
 		// 获取日期
-		char buffer_ID[20] = { 0 };
+		char buffer_ID1[20] = { 0 };
+		char buffer_ID2[20] = { 0 };
 		DATE_T date = get_time();
-		sprintf_s(buffer_ID, sizeof(buffer_ID), "WL%04d%02d%02d%06d", date.year, date.month, 
-			date.day,getList_len(order_list) + 1);
 
-		strcpy_s(order1->oder_ID, sizeof(order1->oder_ID), buffer_ID);										// ID
+
+		sprintf_s(buffer_ID1, sizeof(buffer_ID1), "WL%04d%02d%02d%06d", date.year, date.month, 
+			date.day,getList_len(order_list) + 1);
+		strcpy_s(order1->oder_ID, sizeof(order1->oder_ID), buffer_ID1);										// ID
 		strcpy_s(order1->origin_address, sizeof(order1->origin_address), "Shanghai");						// 发货地址
 		strcpy_s(order1->shipping_address, sizeof(order1->shipping_address), "Beijing");					// 收货地址
 		strcpy_s(order1->desired_delivery_time, sizeof(order1->desired_delivery_time), "2026-11-01");		// 期望送达时间
@@ -66,8 +71,27 @@ void order_data_init()
 		order1->goods_weight = 2.5f;																		// 货物重量
 		order1->goods_count = 10;																			// 数量
 		order1->goods_volumn = 0.03f;																		// 体积
+
+
+		sprintf_s(buffer_ID2, sizeof(buffer_ID2), "WL%04d%02d%02d%06d", date.year, date.month,
+			date.day, getList_len(order_list) + 2);
+		strcpy_s(order2->oder_ID, sizeof(order2->oder_ID), buffer_ID2);										// ID
+		strcpy_s(order2->origin_address, sizeof(order2->origin_address), "Sichuan");						// 发货地址
+		strcpy_s(order2->shipping_address, sizeof(order2->shipping_address), "Beijing");					// 收货地址
+		strcpy_s(order2->desired_delivery_time, sizeof(order2->desired_delivery_time), "2026-11-02");		// 期望送达时间
+		strcpy_s(order2->customer_name, sizeof(order2->customer_name), "Max");								// 客户名	
+		strcpy_s(order2->customer_phone, sizeof(order2->customer_phone), "13800138220");					// 电话
+		order2->order_status = ORDER_PENDING_REVIEW;														// 订单状态
+		strcpy_s(order2->goods_name, sizeof(order2->goods_name), "iphone");									// 货物名称
+		order2->goods_type = GOODS_GENERAL;																	// 货物类型
+		order2->goods_weight = 2.5f;																		// 货物重量
+		order2->goods_count = 10;																			// 数量
+		order2->goods_volumn = 0.03f;																		// 体积
+
+
 		// 添加到文件中
 		file_add(order_file, sizeof(ORDER_T), order1);
+		file_add(order_file, sizeof(ORDER_T), order2);
 	}
 	// 数据读入到链表中
 	file_read_list(order_file,order_list,sizeof(ORDER_T));
@@ -81,13 +105,12 @@ void print_order(void* order)
 		printf("order is null\n");
 		return;
 	}
-
 	ORDER_T* o = (ORDER_T*)order;
-
 	const char* status_text = "未知";
 	if (o->order_status >= 0 && o->order_status <= 6)
 	{
 		status_text = order_status_names[o->order_status];
+		printf("%d\n", o->order_status);
 	}
 
 	const char* type_text = "未知";
@@ -106,26 +129,49 @@ void print_order(void* order)
 	printf("Delivery    : %s\n", o->desired_delivery_time);
 	printf("Goods       : %s\n", o->goods_name);
 	printf("Type        : %s\n", type_text);
-	printf("Weight      : %.2f\n", o->goods_weight);
+	printf("Weight      : %.2fKG\n", o->goods_weight);
 	printf("Count       : %d\n", o->goods_count);
-	printf("Volume      : %.3f\n", o->goods_volumn);
+	printf("Volume      : %.3fL\n", o->goods_volumn);
 	printf("===========================\n");
 }
 
-//// 创建订单
-//void craete_new_order(const char* address_from, const char* address_to, const char* cus_name,
-//	const char* cus_phone, const char* g_name, const int g_type, const float g_weight, const int g_count, const float g_volumn)
-//{
-//	ORDER_T* order = (ORDER_T*)malloc(sizeof(ORDER_T));
-//	if (order == NULL)
-//	{
-//		printf("malloc failed");
-//		exit(1);
-//	}
-//	// 获取日期
-//	char buffer_ID[20] = { 0 };
-//	DATE_T date = get_time();
-//	sprintf_s(buffer_ID, sizeof(buffer_ID), "WL%04d%02d%02d%06d", date.year, date.month,
-//		date.day, getList_len(order_list) + 1);
-//
-//}
+// 创建订单
+void craete_new_order(const char* address_from, const char* address_to, const char* cus_name,
+	const char* cus_phone, const char* g_name, const int g_type, const float g_weight,
+	const int g_count, const float g_volumn)
+{
+	ORDER_T* order = (ORDER_T*)malloc(sizeof(ORDER_T));
+	if (order == NULL)
+	{
+		printf("malloc failed");
+		exit(1);
+	}
+	// 获取日期
+	char buffer_ID[20] = { 0 };
+	char buffer_DDT[20] = { 0 };
+	DATE_T date = get_time();
+	sprintf_s(buffer_ID, sizeof(buffer_ID), "WL%04d%02d%02d%06d", date.year, date.month,
+		date.day, getList_len(order_list) + 1);
+
+	// 未对预计送达日期处理
+	sprintf_s(buffer_DDT, sizeof(buffer_DDT), "%04d%02d%02d", date.year, date.month,
+		date.day + 3);
+
+	strcpy_s(order->oder_ID, sizeof(order->oder_ID), buffer_ID);									// ID
+	strcpy_s(order->origin_address, sizeof(order->origin_address), address_from);					// 发货地址
+	strcpy_s(order->shipping_address, sizeof(order->shipping_address), address_to);					// 收货地址
+	strcpy_s(order->desired_delivery_time, sizeof(order->desired_delivery_time), buffer_DDT);		// 期望送达时间
+	strcpy_s(order->customer_name, sizeof(order->customer_name), cus_name);							// 客户名	
+	strcpy_s(order->customer_phone, sizeof(order->customer_phone), cus_phone);						// 电话
+	order->order_status = ORDER_PENDING_REVIEW;														// 订单状态
+	strcpy_s(order->goods_name, sizeof(order->goods_name), g_name);									// 货物名称
+	order->goods_type = g_type;																		// 货物类型
+	order->goods_weight = g_weight;																	// 货物重量
+	order->goods_count = g_count;																	// 数量
+	order->goods_volumn = g_volumn;																	// 体积
+
+	insertNode_Tail(order_list, order);
+	file_add(order_file, sizeof(ORDER_T), order);
+
+	printf("create an order successfully\n");
+}

@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="adminwin.cpp" />
+    <ClCompile Include="auditorderwin.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="createuserwin.cpp" />
     <ClCompile Include="customer_service.cpp" />
@@ -158,9 +159,11 @@
     <ClCompile Include="systemmanagewin.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="warehouse_worker.cpp" />
+    <ClCompile Include="popupwin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adminwin.h" />
+    <ClInclude Include="auditorderwin.h" />
     <ClInclude Include="control.h" />
     <ClInclude Include="createuserwin.h" />
     <ClInclude Include="customer_service.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="systemmanagewin.h" />
     <ClInclude Include="user.h" />
     <ClInclude Include="warehouse_worker.h" />
+    <ClInclude Include="popupwin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
