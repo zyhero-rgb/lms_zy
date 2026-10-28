@@ -1,6 +1,8 @@
 ﻿#include "startwin.h"
 #include "control.h"
 #include <string.h>
+#include "user.h"
+#include "popupwin.h"
 
 int startWin()
 {
@@ -108,7 +110,9 @@ int startWin()
 	// 重置管理员密码
 	else if (first_win.current == 1)
 	{
-
+		int status = reset_admin_pwd();
+		reset_popup_win(status);
+		return 0;
 	}
 	else if (first_win.current == 2)
 	{

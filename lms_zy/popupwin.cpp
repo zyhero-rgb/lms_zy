@@ -4,15 +4,14 @@
 #include <tchar.h>
 
 // 通用弹窗
-void popup_show(LPCTSTR title, LPCTSTR message, bool failure)
+void popup_show(LPCTSTR title, LPCTSTR message, bool staus)
 {
 	const int winW = 440;
 	const int winH = 200;
 	const int winX = (WIN_WIDTH - winW) / 2;
-	const int winY = (WIN_HEIGHT - winH) / 2;
-	//                             红色                  蓝色
-	COLORREF accent = failure ? RGB(220, 70, 75) : RGB(64, 158, 255);
-	COLORREF panel = failure ? RGB(48, 26, 30) : RGB(22, 35, 62);
+	const int winY = (WIN_HEIGHT - winH) / 2;                                             
+	COLORREF accent = staus ? RGB(20, 210, 225) : RGB(225, 25, 14);
+	COLORREF panel = staus ? RGB(32, 66, 255) : RGB(255, 96, 53);
 	COLORREF textColor = RGB(235, 240, 250);
 
 	// 弹窗主体
@@ -41,7 +40,7 @@ void popup_show(LPCTSTR title, LPCTSTR message, bool failure)
 	outtextxy(winX + (winW - messageWidth) / 2, winY + 112, message);
 
 	// 提示窗口停留 2 秒后自动关闭
-	Sleep(2000);
+	Sleep(1000);
 }
 
 // 登录提示窗口
@@ -49,7 +48,7 @@ void login_popup_win(bool status)
 {
 	if (status == true)
 	{
-		popup_show(_T("登录成功"),_T("欢迎使用"),!status);
+		popup_show(_T("登录成功"),_T("欢迎使用"),status);
 	}
 	else
 	{
@@ -63,10 +62,23 @@ void create_popup_win(bool status)
 {
 	if (status)
 	{
-		popup_show(_T("操作成功"),_T("创建成功"),!status);
+		popup_show(_T("操作成功"),_T("创建成功"),status);
 	}
 	else
 	{
 		popup_show(_T("操作失败"), _T("创建失败"), status);
+	}
+}
+
+// 重置密码弹窗提示
+void reset_popup_win(bool status)
+{
+	if (status)
+	{
+		popup_show(_T("操作成功"), _T("重置密码成功"), status);
+	}
+	else
+	{
+		popup_show(_T("操作失败"), _T("重置密码失败"), status);
 	}
 }

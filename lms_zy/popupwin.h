@@ -7,6 +7,7 @@ void login_popup_win(bool status);
 // 创建角色和订单提示弹窗
 void create_popup_win(bool status);
 
-
+// 重置密码弹窗提示
+void reset_popup_win(bool status);
 #endif
 																									

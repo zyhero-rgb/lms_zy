@@ -145,6 +145,7 @@
     <ClCompile Include="auditorderwin.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="createuserwin.cpp" />
+    <ClCompile Include="create_order_win.cpp" />
     <ClCompile Include="customer_service.cpp" />
     <ClCompile Include="date.cpp" />
     <ClCompile Include="dispatcher.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="auditorderwin.h" />
     <ClInclude Include="control.h" />
     <ClInclude Include="createuserwin.h" />
+    <ClInclude Include="create_order_win.h" />
     <ClInclude Include="customer_service.h" />
     <ClInclude Include="date.h" />
     <ClInclude Include="dispatcher.h" />

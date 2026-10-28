@@ -73,6 +73,9 @@
     <ClCompile Include="popupwin.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="create_order_win.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h">
@@ -127,6 +130,9 @@
       <Filter>data</Filter>
     </ClInclude>
     <ClInclude Include="popupwin.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="create_order_win.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

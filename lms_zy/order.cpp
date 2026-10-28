@@ -6,6 +6,7 @@
 #include "date.h"
 #include <stdlib.h>
 #include <mutex>
+#include <time.h>
 
 // 货物类型
 static const char* goods_type_names[] = {
@@ -70,7 +71,7 @@ void order_data_init()
 		order1->goods_type = GOODS_GENERAL;																	// 货物类型
 		order1->goods_weight = 2.5f;																		// 货物重量
 		order1->goods_count = 10;																			// 数量
-		order1->goods_volumn = 0.03f;																		// 体积
+		order1->goods_volume = 0.03f;																		// 体积
 
 
 		sprintf_s(buffer_ID2, sizeof(buffer_ID2), "WL%04d%02d%02d%06d", date.year, date.month,
@@ -86,7 +87,7 @@ void order_data_init()
 		order2->goods_type = GOODS_GENERAL;																	// 货物类型
 		order2->goods_weight = 2.5f;																		// 货物重量
 		order2->goods_count = 10;																			// 数量
-		order2->goods_volumn = 0.03f;																		// 体积
+		order2->goods_volume = 0.03f;																		// 体积
 
 
 		// 添加到文件中
@@ -131,12 +132,50 @@ void print_order(void* order)
 	printf("Type        : %s\n", type_text);
 	printf("Weight      : %.2fKG\n", o->goods_weight);
 	printf("Count       : %d\n", o->goods_count);
-	printf("Volume      : %.3fL\n", o->goods_volumn);
+	printf("Volume      : %.3fL\n", o->goods_volume);
 	printf("===========================\n");
 }
 
+// 判断闰年
+static int is_leap_year(int year)
+{
+	return (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+}
+
+// 某年某月有多少天
+static int days_in_month(int year, int month)
+{
+	int days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	// 闰年二月
+	if (month == 2 && is_leap_year(year))
+	{
+		return 29;
+	}
+	return days[month - 1];
+}
+
+// DATE_T 往后加 days 天
+static DATE_T add_days(DATE_T date, int days)
+{
+	date.day += days;
+	// 超过该月份的最大天数
+	while (date.day > days_in_month(date.year, date.month))
+	{
+		date.day -= days_in_month(date.year, date.month);
+		date.month++;
+
+		if (date.month > 12)
+		{
+			date.month = 1;
+			date.year++;
+		}
+	}
+
+	return date;
+}
+
 // 创建订单
-void craete_new_order(const char* address_from, const char* address_to, const char* cus_name,
+bool create_new_order(const char* address_from, const char* address_to, const char* cus_name,
 	const char* cus_phone, const char* g_name, const int g_type, const float g_weight,
 	const int g_count, const float g_volumn)
 {
@@ -144,18 +183,23 @@ void craete_new_order(const char* address_from, const char* address_to, const ch
 	if (order == NULL)
 	{
 		printf("malloc failed");
-		exit(1);
+		return false;
 	}
 	// 获取日期
 	char buffer_ID[20] = { 0 };
 	char buffer_DDT[20] = { 0 };
+	
+	// 获取创建订单时的日期
 	DATE_T date = get_time();
+
 	sprintf_s(buffer_ID, sizeof(buffer_ID), "WL%04d%02d%02d%06d", date.year, date.month,
 		date.day, getList_len(order_list) + 1);
 
-	// 未对预计送达日期处理
-	sprintf_s(buffer_DDT, sizeof(buffer_DDT), "%04d%02d%02d", date.year, date.month,
-		date.day + 3);
+	// 预计送达时间：用订单创建时间往后推 3 天
+	DATE_T delivery = add_days(date, 3);
+
+	sprintf_s(buffer_DDT, sizeof(buffer_DDT), "%04d-%02d-%02d",
+		delivery.year, delivery.month, delivery.day);
 
 	strcpy_s(order->oder_ID, sizeof(order->oder_ID), buffer_ID);									// ID
 	strcpy_s(order->origin_address, sizeof(order->origin_address), address_from);					// 发货地址
@@ -168,10 +212,11 @@ void craete_new_order(const char* address_from, const char* address_to, const ch
 	order->goods_type = g_type;																		// 货物类型
 	order->goods_weight = g_weight;																	// 货物重量
 	order->goods_count = g_count;																	// 数量
-	order->goods_volumn = g_volumn;																	// 体积
+	order->goods_volume = g_volumn;																	// 体积
 
 	insertNode_Tail(order_list, order);
 	file_add(order_file, sizeof(ORDER_T), order);
 
 	printf("create an order successfully\n");
+	return true;
 }

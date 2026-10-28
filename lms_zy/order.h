@@ -14,12 +14,12 @@
 #define ORDER_COMPLETED         6	// 已完成
 
 // 货物类型
-#define GOODS_GENERAL    1			// 普通货物
-#define GOODS_FRAGILE    2			// 易碎品
-#define GOODS_COLD       3			// 冷链货物
-#define GOODS_HAZARDOUS  4			// 危险品
-#define GOODS_VALUABLE   5			// 贵重物品
-#define GOODS_BULKY      6			// 大件货物
+#define GOODS_GENERAL    0			// 普通货物
+#define GOODS_FRAGILE    1			// 易碎品
+#define GOODS_COLD       2			// 冷链货物
+#define GOODS_HAZARDOUS  3			// 危险品
+#define GOODS_VALUABLE   4			// 贵重物品
+#define GOODS_BULKY      5			// 大件货物
 
 
 extern LNode* order_list;			// 订单数据链表
@@ -41,7 +41,7 @@ typedef struct oredr_t
 	int goods_type;					// 类型
 	float goods_weight;				// 重量
 	int goods_count;				// 数量
-	float goods_volumn;				// 体积
+	float goods_volume;				// 体积
 	
 	char rejected_reason[100];		// 驳回理由
 }ORDER_T;
@@ -53,7 +53,7 @@ void order_data_init();
 void print_order(void* order);
 
 // 创建订单
-void craete_new_order(const char* address_from, const char* address_to, const char* cus_name,
+bool create_new_order(const char* address_from, const char* address_to, const char* cus_name,
 	const char* cus_phone, const char* g_name, const int g_type, 
 	const float g_weight, const int g_count, const float g_volumn);
 

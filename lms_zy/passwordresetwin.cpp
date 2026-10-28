@@ -133,12 +133,21 @@ int password_reset_win()
 	win_add_ctrl(&reset_win, &status);     // 5
 
 	reset_win = window_run(&reset_win);
+	// 确定重置按钮
 	if (reset_win.current == 1)
 	{
 		if (strlen(reset_win.controls[0].text) > 0)
 		{
 			resert_pwd(reset_win.controls[0].text);
-			return 3;
+			// 如果是管理员重置自己的密码，则需要退出登录
+			if (strcmp(reset_win.controls[0].text,"admin") == 0)
+			{
+				return 0;
+			}
+			else
+			{
+				return 3;
+			}
 		}
 		else
 		{

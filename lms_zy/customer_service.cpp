@@ -113,5 +113,10 @@ int customer_service_win()
 	win_add_ctrl(&win, &status);
 
 	win = window_run(&win);
+	// 创建订单
+	if (win.current == 0)
+	{
+		return 11;
+	}
 	return 0;
 }

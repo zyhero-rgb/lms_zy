@@ -6,8 +6,8 @@
 #include "file.h"
 
 static ORDER_T* pending_orders[200];	// 所有待审核订单
-static int all_orders = 0;			// 所有待审核的订单总数
-static int cur_order = 0;			// 当前待审核订单
+static int all_orders = 0;				// 所有待审核的订单总数
+static int cur_order = 0;				// 当前待审核订单
 
 // 加载待审核的订单
 static void load_pending_orders()
@@ -54,14 +54,15 @@ static void audit_order(ORDER_T* order,bool status,const char* reason)
 		order_file = NULL;
 	}
 	fopen_s(&order_file, order_file_name, "wb+");
+
 	if (order_file != NULL)
 	{
 		file_write_list(order_file, order_list, sizeof(ORDER_T));
+		fflush(order_file);
+		fclose(order_file);
+		order_file = NULL;
 	}
-	else
-	{
-		printf("failed to open file\n");
-	}
+	fopen_s(&order_file, order_file_name, "rb+");
 }
 
 // 订单状态文字
@@ -177,7 +178,7 @@ static void draw_audit_info(const WINDOW_T* win)
 	row += 38;
 	sprintf_s(line, sizeof(line), "数量：%d", order->goods_count);
 	outtextxy(left, row, line);
-	sprintf_s(line, sizeof(line), "体积：%.3fL", order->goods_volumn);
+	sprintf_s(line, sizeof(line), "体积：%.3fL", order->goods_volume);
 	outtextxy(right, row, line);
 }
 
@@ -186,6 +187,7 @@ int audit_order_win()
 {
 	all_orders = 0;
 	cur_order = 0;
+
 	load_pending_orders();
 	const int winWid = 860;
 	const int winHgh = 650;
@@ -354,7 +356,7 @@ int audit_order_win()
 		.textColor = statusColor,
 		.fontSize = 18
 	};
-	strcpy_s(page_label.text, sizeof(page_label.text), "第 1 / 1 条");
+	sprintf_s(page_label.text, sizeof(page_label.text),"第 %d / %d 条",all_orders == 0 ? 0 : cur_order + 1,all_orders);
 
 	win_add_ctrl(&audit_win, &title);        // 6
 	win_add_ctrl(&audit_win, &reason_label); // 7
@@ -364,6 +366,12 @@ int audit_order_win()
 
 	while (true)
 	{
+		// 每次重画前更新页码，保证跟随 cur_order 变化
+		if (all_orders > 0 && cur_order >= all_orders)
+		{
+			cur_order = all_orders - 1;
+		}
+		sprintf_s(page_label.text, sizeof(page_label.text), "第 %d / %d 条", all_orders == 0 ? 0 : cur_order + 1, all_orders);
 		audit_win = window_run(&audit_win);
 
 		// 上一个
