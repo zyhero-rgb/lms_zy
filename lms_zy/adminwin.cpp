@@ -168,7 +168,7 @@ int adminwin()
 
 	// 先添加按钮，保证按钮索引为 0–5
 	win_add_ctrl(&admin_win, &btn_system);     // 0
-	win_add_ctrl(&admin_win, &btn_order);      // 1
+	win_add_ctrl(&admin_win, &btn_order);      // 1 
 	win_add_ctrl(&admin_win, &btn_storage);    // 2
 	win_add_ctrl(&admin_win, &btn_transport);  // 3
 	win_add_ctrl(&admin_win, &btn_statistics); // 4
@@ -184,11 +184,10 @@ int adminwin()
 	{
 		return 3;
 	}
-
-
+	// 订单管理界面
 	if (admin_win.current == 1)
 	{
-		return 10;
+		return 13;
 	}
 
 	if (admin_win.current == 5)

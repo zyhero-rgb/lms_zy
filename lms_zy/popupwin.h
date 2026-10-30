@@ -9,5 +9,8 @@ void create_popup_win(bool status);
 
 // 重置密码弹窗提示
 void reset_popup_win(bool status);
+
+// 查询结果弹窗提示
+void queryorder_popup_win(bool status);
 #endif
 																									

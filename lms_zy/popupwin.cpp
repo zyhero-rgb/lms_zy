@@ -82,3 +82,16 @@ void reset_popup_win(bool status)
 		popup_show(_T("操作失败"), _T("重置密码失败"), status);
 	}
 }
+
+// 查询结果弹窗提示
+void queryorder_popup_win(bool status)
+{
+	if (status)
+	{
+		popup_show(_T("操作成功"), _T("查询订单成功"), status);
+	}
+	else
+	{
+		popup_show(_T("操作失败"), _T("请检查输入的查询条件"), status);
+	}
+}

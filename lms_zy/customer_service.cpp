@@ -118,5 +118,9 @@ int customer_service_win()
 	{
 		return 11;
 	}
+	if (win.current == 1)
+	{
+		return 12;
+	}
 	return 0;
 }

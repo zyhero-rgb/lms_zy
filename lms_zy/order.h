@@ -57,7 +57,5 @@ bool create_new_order(const char* address_from, const char* address_to, const ch
 	const char* cus_phone, const char* g_name, const int g_type, 
 	const float g_weight, const int g_count, const float g_volumn);
 
-//// 订单审核
-//void audit_order(const char* );
 
 #endif

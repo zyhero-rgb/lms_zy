@@ -36,19 +36,20 @@ int warehouse_worker_win()
 		"出库管理",
 		"库存查询",
 		"盘点管理",
+		"订单查询",
 		"退出登录"
 	};
-	const int item_count = 5;
+	const int item_count = 6;
 
 	const int btnW = 400;
-	const int btnH = 52;
+	const int btnH = 50;
 	const int btnX = win_x + (winWid - btnW) / 2;
 
 	for (int i = 0; i < item_count; i++)
 	{
 		CONTROL_T btn = {
 			.x = btnX,
-			.y = win_y + 140 + i * 70,
+			.y = win_y + 120 + i * 62,
 			.width = btnW,
 			.height = btnH,
 			.type = BUTTON,
@@ -96,7 +97,7 @@ int warehouse_worker_win()
 
 	CONTROL_T status = {
 		.x = win_x + 50,
-		.y = win_y + 540,
+		.y = win_y + 520,
 		.width = winWid - 100,
 		.height = 26,
 		.type = LABEL,
@@ -113,5 +114,16 @@ int warehouse_worker_win()
 	win_add_ctrl(&win, &status);
 
 	win = window_run(&win);
+
+	// 订单查询
+	if (win.current == 4)
+	{
+		return 12;
+	}
+	// 退出登录
+	if (win.current == 5)
+	{
+		return 0;
+	}
 	return 0;
 }

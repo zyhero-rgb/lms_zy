@@ -21,6 +21,8 @@
 #include "order.h"
 #include "auditorderwin.h"
 #include "create_order_win.h"
+#include "order_query_win.h"
+#include "order_manage_win.h"
 
 LNode* user_list = NULL;
 FILE* user_file = NULL;
@@ -48,8 +50,10 @@ int main()
 
 	// 函数指针数组		   //   0          1        2            3                 4            5                 6
 	window_handler wins[] = { startWin,loginWin,adminwin,system_manage_win ,createUer_win ,password_reset_win ,search_user_win ,
-								customer_service_win ,dispatcher_win ,warehouse_worker_win ,audit_order_win ,create_order_win};
-	                           //       7                    8                 9               10					11
+								customer_service_win ,dispatcher_win ,warehouse_worker_win ,audit_order_win ,create_order_win
+									//       7                    8                 9               10					11
+								,	order_query_win	, order_manage_win };
+									//        12           13
 
 	int cur_win = 0;
 	while (true)

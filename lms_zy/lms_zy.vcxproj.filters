@@ -76,6 +76,12 @@
     <ClCompile Include="create_order_win.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="order_query_win.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="order_manage_win.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control.h">
@@ -133,6 +139,12 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="create_order_win.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="order_query_win.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="order_manage_win.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

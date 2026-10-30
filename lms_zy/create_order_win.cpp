@@ -308,7 +308,13 @@ int create_order_win()
 					int status = create_new_order(order_win.controls[3].text,order_win.controls[4].text, order_win.controls[5].text,
 						order_win.controls[6].text, order_win.controls[7].text,type,weight,count,volume);
 					create_popup_win(status);
+
 				}
+			}
+			// 清空输入框
+			for (int i = 3; i <= 11; i++)
+			{
+				order_win.controls[i].text[0] = '\0';
 			}
 		}
 		else if (order_win.current == 1)
@@ -320,7 +326,7 @@ int create_order_win()
 			// 管理员
 			if (current->role == 1)
 			{
-				return 3;
+				return 13;
 			}
 			// 客服
 			else if (current->role == 4)

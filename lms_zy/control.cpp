@@ -126,7 +126,7 @@ static int next_control(const WINDOW_T* win, int cur, int step)
 	return cur;
 }
 
-// 处理窗口
+// 窗口驱动
 WINDOW_T window_run(WINDOW_T* win )
 {
 	// 先清掉所有选中状态

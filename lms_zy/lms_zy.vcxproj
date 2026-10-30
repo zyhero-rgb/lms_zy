@@ -154,6 +154,8 @@
     <ClCompile Include="logwin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="order.cpp" />
+    <ClCompile Include="order_manage_win.cpp" />
+    <ClCompile Include="order_query_win.cpp" />
     <ClCompile Include="passwordresetwin.cpp" />
     <ClCompile Include="searchuserwin.cpp" />
     <ClCompile Include="startwin.cpp" />
@@ -175,6 +177,8 @@
     <ClInclude Include="list.h" />
     <ClInclude Include="loginwin.h" />
     <ClInclude Include="order.h" />
+    <ClInclude Include="order_manage_win.h" />
+    <ClInclude Include="order_query_win.h" />
     <ClInclude Include="passwordresetwin.h" />
     <ClInclude Include="searchuserwin.h" />
     <ClInclude Include="startwin.h" />
